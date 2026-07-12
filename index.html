@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Birthday Surprise</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 body {
   font-family: Arial;
@@ -30,62 +31,88 @@ button {
 </head>
 <body>
 
-<div class="card">
-  <h3>Buat Link Surprise</h3>
-  <input id="nama" placeholder="Nama yang ulang tahun">
-  <input id="password" placeholder="Password">
-  <button onclick="buatLink()">Buat Link</button>
-  <p id="hasil"></p>
-</div>
+<div id="app"></div>
 
 <script>
-function buatLink() {
+const supabaseUrl = "https://eqqohpkcshygvakvnvre.supabase.co";
+const supabaseKey = "sb_publishable_7qiliYzeUqJE5IMiMO2luQ_4utxTjxL";
+
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+const app = document.getElementById("app");
+
+if (!id) {
+  app.innerHTML = `
+    <div class="card">
+      <h3>Buat Link Surprise</h3>
+      <input id="nama" placeholder="Nama yang ulang tahun">
+      <input id="password" placeholder="Password">
+      <button onclick="buatLink()">Buat Link</button>
+      <p id="hasil"></p>
+    </div>
+  `;
+}
+
+async function buatLink() {
   const nama = document.getElementById("nama").value;
   const password = document.getElementById("password").value;
 
-  const id = Date.now();
+  const { data, error } = await supabase
+    .from("webHBD")
+    .insert([{ nama: nama, password: password }])
+    .select();
 
-  const data = {
-    nama,
-    password
-  };
+  if (error) {
+    alert("Error: " + error.message);
+    return;
+  }
 
-  localStorage.setItem("data_" + id, JSON.stringify(data));
-
-  const link = window.location.origin + "/?id=" + id;
+  const newId = data[0].id;
+  const link = window.location.origin + "?id=" + newId;
 
   document.getElementById("hasil").innerHTML =
     "Link: <br><a href='" + link + "'>" + link + "</a>";
 }
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
-
 if (id) {
-  const data = JSON.parse(localStorage.getItem("data_" + id));
+  loadData();
+}
 
-  if (data) {
-    document.body.innerHTML = `
+async function loadData() {
+  const { data, error } = await supabase
+    .from("webHBD")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (!data) {
+    app.innerHTML = "<div class='card'>Link tidak ditemukan</div>";
+    return;
+  }
+
+  app.innerHTML = `
+    <div class="card">
+      <h3>Masukkan Password</h3>
+      <input id="pw">
+      <button onclick="cek('${data.password}','${data.nama}')">Masuk</button>
+    </div>
+  `;
+}
+
+function cek(password, nama) {
+  const pw = document.getElementById("pw").value;
+  if (pw === password) {
+    app.innerHTML = `
       <div class="card">
-        <h3>Masukkan Password</h3>
-        <input id="pw">
-        <button onclick="cek()">Masuk</button>
+        <h2>Selamat Ulang Tahun, ${nama}</h2>
+        <p>Semoga panjang umur, sehat selalu, dan semua impianmu tercapai.</p>
       </div>
     `;
-
-    window.cek = function() {
-      const pw = document.getElementById("pw").value;
-      if (pw === data.password) {
-        document.body.innerHTML = `
-          <div class="card">
-            <h2>Selamat Ulang Tahun, ${data.nama}</h2>
-            <p>Semoga panjang umur dan bahagia selalu.</p>
-          </div>
-        `;
-      } else {
-        alert("Password salah");
-      }
-    }
+  } else {
+    alert("Password salah");
   }
 }
 </script>
