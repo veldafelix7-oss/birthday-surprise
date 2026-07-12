@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Birthday Surprise</title>
+<style>
+body {
+  font-family: Arial;
+  background: #ffd6e7;
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  margin: auto;
+}
+input, button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+}
+button {
+  background: #ff69b4;
+  color: white;
+  border: none;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h3>Buat Link Surprise</h3>
+  <input id="nama" placeholder="Nama yang ulang tahun">
+  <input id="password" placeholder="Password">
+  <button onclick="buatLink()">Buat Link</button>
+  <p id="hasil"></p>
+</div>
+
+<script>
+function buatLink() {
+  const nama = document.getElementById("nama").value;
+  const password = document.getElementById("password").value;
+
+  const id = Date.now();
+
+  const data = {
+    nama,
+    password
+  };
+
+  localStorage.setItem("data_" + id, JSON.stringify(data));
+
+  const link = window.location.origin + "/?id=" + id;
+
+  document.getElementById("hasil").innerHTML =
+    "Link: <br><a href='" + link + "'>" + link + "</a>";
+}
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+if (id) {
+  const data = JSON.parse(localStorage.getItem("data_" + id));
+
+  if (data) {
+    document.body.innerHTML = `
+      <div class="card">
+        <h3>Masukkan Password</h3>
+        <input id="pw">
+        <button onclick="cek()">Masuk</button>
+      </div>
+    `;
+
+    window.cek = function() {
+      const pw = document.getElementById("pw").value;
+      if (pw === data.password) {
+        document.body.innerHTML = `
+          <div class="card">
+            <h2>Selamat Ulang Tahun, ${data.nama}</h2>
+            <p>Semoga panjang umur dan bahagia selalu.</p>
+          </div>
+        `;
+      } else {
+        alert("Password salah");
+      }
+    }
+  }
+}
+</script>
+
+</body>
+</html>
