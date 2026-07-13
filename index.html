@@ -4,74 +4,89 @@
 <meta charset="UTF-8">
 <title>Birthday Surprise</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Great+Vibes&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <style>
+
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #f6c1d8, #f9e3ee);
-  min-height: 100vh;
+  background: linear-gradient(180deg, #f7c6da, #fce9f3);
   overflow-x: hidden;
 }
 
-.background-layer {
-  position: fixed;
-  width: 600px;
-  height: 600px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 50%;
-  top: -200px;
-  right: -200px;
+/* FLOATING ELEMENTS */
+.ribbon {
+  position: absolute;
+  width: 200px;
+  animation: float 6s ease-in-out infinite;
+  opacity: 0.8;
 }
 
-.background-layer2 {
-  position: fixed;
-  width: 500px;
-  height: 500px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 50%;
-  bottom: -150px;
-  left: -150px;
+.ribbon.left { top: 20px; left: 10px; }
+.ribbon.right { bottom: 40px; right: 20px; }
+
+.flower {
+  position: absolute;
+  width: 260px;
+  right: -40px;
+  top: 40%;
+  transform: translateY(-50%);
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+  animation: floatSlow 8s ease-in-out infinite;
 }
 
-.wrapper {
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes floatSlow {
+  0%,100% { transform: translateY(-50%); }
+  50% { transform: translateY(-60%); }
+}
+
+/* SECTIONS */
+.section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 30px;
   position: relative;
   z-index: 2;
-  padding: 40px 20px;
-  max-width: 500px;
-  margin: auto;
 }
 
-.section {
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(8px);
-  border-radius: 18px;
-  padding: 30px;
-  margin-bottom: 25px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+/* TEXT STYLE */
+.hero-title {
+  font-family: 'Great Vibes', cursive;
+  font-size: 42px;
+  color: #8c3a5c;
+  line-height: 1.2;
 }
 
-h1 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 10px;
+.subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  margin-top: 15px;
+  color: #6a3d50;
+  max-width: 420px;
 }
 
-p {
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.6;
-  color: #444;
+.form-area {
+  margin-top: 40px;
+  max-width: 320px;
 }
 
 input {
   width: 100%;
   padding: 12px;
-  margin-top: 12px;
-  border-radius: 10px;
-  border: 1px solid #e8b8cc;
+  margin-top: 14px;
+  border-radius: 30px;
+  border: 1px solid #e6a7c0;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(6px);
   font-size: 14px;
 }
 
@@ -79,28 +94,53 @@ button {
   width: 100%;
   padding: 12px;
   margin-top: 18px;
-  border-radius: 10px;
+  border-radius: 30px;
   border: none;
-  background: #e28db0;
+  background: linear-gradient(90deg, #e48ab2, #d06793);
   color: white;
   font-size: 14px;
   cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.03);
 }
 
 .link-box {
   margin-top: 15px;
   font-size: 12px;
   word-break: break-all;
+  color: #5c3345;
 }
+
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  animation: sparkle 3s infinite ease-in-out;
+}
+
+@keyframes sparkle {
+  0%,100% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="background-layer"></div>
-<div class="background-layer2"></div>
+<img src="https://i.imgur.com/0XKzn2L.png" class="ribbon left">
+<img src="https://i.imgur.com/0XKzn2L.png" class="ribbon right">
+<img src="https://i.imgur.com/1F6XG5L.png" class="flower">
 
-<div class="wrapper" id="app"></div>
+<div class="sparkle" style="top:20%; left:30%;"></div>
+<div class="sparkle" style="top:60%; left:70%;"></div>
+
+<div id="app"></div>
 
 <script>
 window.addEventListener("load", async function () {
@@ -111,53 +151,41 @@ window.addEventListener("load", async function () {
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
-
   const app = document.getElementById("app");
 
   if (!id) {
 
     app.innerHTML = `
       <div class="section">
-        <h1>Birthday Link Creator</h1>
-        <p>
-          Buat halaman ulang tahun pribadi yang hanya bisa dibuka dengan password.
-          Halaman ini akan menampilkan ucapan khusus yang disesuaikan dengan nama penerima.
-        </p>
-      </div>
+        <div class="hero-title">A Special Birthday Page</div>
+        <div class="subtitle">
+          Buat halaman ulang tahun pribadi yang hanya bisa diakses dengan password.
+          Sebuah kejutan kecil yang penuh makna.
+        </div>
 
-      <div class="section">
-        <input id="nama" placeholder="Nama yang berulang tahun">
-        <input id="password" placeholder="Password untuk membuka halaman">
-        <button id="btn">Buat Link Surprise</button>
-        <div id="hasil" class="link-box"></div>
+        <div class="form-area">
+          <input id="nama" placeholder="Nama yang berulang tahun">
+          <input id="password" placeholder="Password">
+          <button id="btn">Buat Link Surprise</button>
+          <div id="hasil" class="link-box"></div>
+        </div>
       </div>
     `;
 
     document.getElementById("btn").onclick = async function () {
-
       const nama = document.getElementById("nama").value.trim();
       const password = document.getElementById("password").value.trim();
 
-      if (!nama || !password) {
-        alert("Semua field harus diisi.");
-        return;
-      }
-
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("webHBD")
         .insert([{ nama: nama, password: password }])
         .select();
-
-      if (error) {
-        alert("Terjadi kesalahan.");
-        return;
-      }
 
       const newId = data[0].id;
       const link = window.location.origin + "?id=" + newId;
 
       document.getElementById("hasil").innerHTML =
-        "Link berhasil dibuat:<br><a href='" + link + "'>" + link + "</a>";
+        "Link:<br><a href='" + link + "'>" + link + "</a>";
     };
 
   } else {
@@ -168,45 +196,16 @@ window.addEventListener("load", async function () {
       .eq("id", id)
       .single();
 
-    if (!data) {
-      app.innerHTML = "<div class='section'>Link tidak ditemukan.</div>";
-      return;
-    }
-
     app.innerHTML = `
       <div class="section">
-        <h1>Akses Halaman Ulang Tahun</h1>
-        <p>Masukkan password yang telah dibuat untuk membuka halaman khusus ini.</p>
-        <input id="pw" placeholder="Password">
-        <button id="cekbtn">Masuk</button>
+        <div class="hero-title">Selamat Ulang Tahun, ${data.nama}</div>
+        <div class="subtitle">
+          Hari ini adalah bab baru dalam perjalanan hidupmu.
+          Semoga segala harapan dan rencana yang kamu simpan
+          perlahan menjadi nyata dan membawa kebahagiaan.
+        </div>
       </div>
     `;
-
-    document.getElementById("cekbtn").onclick = function () {
-
-      const pw = document.getElementById("pw").value.trim();
-
-      if (pw === data.password) {
-
-        app.innerHTML = `
-          <div class="section">
-            <h1>Selamat Ulang Tahun, ${data.nama}</h1>
-            <p>
-              Hari ini adalah awal dari satu tahun baru dalam perjalanan hidupmu.
-              Semoga setiap langkah yang kamu ambil membawa kedamaian, keberhasilan,
-              dan kebahagiaan yang terus bertambah.
-            </p>
-            <p>
-              Teruslah tumbuh menjadi versi terbaik dari dirimu sendiri.
-              Semoga semua rencana yang sedang kamu bangun perlahan menjadi nyata.
-            </p>
-          </div>
-        `;
-
-      } else {
-        alert("Password salah.");
-      }
-    };
   }
 
 });
