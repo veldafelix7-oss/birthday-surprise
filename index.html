@@ -65,6 +65,29 @@ left:-80px;
 background:#e48ab2;
 }
 
+.flower-img{
+position:absolute;
+width:220px;
+opacity:0.5;
+pointer-events:none;
+animation:floatFlower 8s ease-in-out infinite;
+}
+
+.flower-left{
+bottom:0;
+left:-40px;
+}
+
+.flower-right{
+top:20%;
+right:-40px;
+}
+
+@keyframes floatFlower{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-15px);}
+}
+
 /* TEXT */
 .title{
 font-family:'Playfair Display',serif;
@@ -150,6 +173,9 @@ app.innerHTML=`
 <div class="wrapper fade-in">
 <div class="decor decor-top"></div>
 <div class="decor decor-bottom"></div>
+
+<img src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?auto=format&fit=crop&w=600&q=80" class="flower-img flower-left">
+<img src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?auto=format&fit=crop&w=600&q=80" class="flower-img flower-right">
 
 <div class="title">Create a Personal Birthday Page</div>
 <div class="subtitle">
