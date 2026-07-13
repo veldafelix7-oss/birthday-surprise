@@ -3,118 +3,187 @@
 <head>
 <meta charset="UTF-8">
 <title>Birthday Surprise</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
 <style>
 body {
-  font-family: Arial;
-  background: #ffd6e7;
-  padding: 20px;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #f8d7e6, #fceef5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 400px;
-  margin: auto;
+
+.container {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
 }
-input, button {
+
+h2 {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+p {
+  font-weight: 300;
+  color: #555;
+}
+
+input {
   width: 100%;
-  padding: 8px;
-  margin-top: 10px;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 8px;
+  border: 1px solid #f0c6d8;
+  outline: none;
+  font-size: 14px;
 }
+
+input:focus {
+  border-color: #e9a8c4;
+}
+
 button {
-  background: #ff69b4;
-  color: white;
+  width: 100%;
+  padding: 12px;
+  margin-top: 16px;
+  border-radius: 8px;
   border: none;
+  background: #e89bb9;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #d982a5;
+}
+
+.link-box {
+  margin-top: 20px;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.success-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.success-message {
+  font-size: 14px;
+  font-weight: 300;
 }
 </style>
 </head>
+
 <body>
 
 <div id="app"></div>
 
 <script>
-const supabaseUrl = "https://eqqohpkcshygvakvnvre.supabase.co";
-const supabaseKey = "sb_publishable_7qiliYzeUqJE5IMiMO2luQ_4utxTjxL";
+window.addEventListener("load", async function () {
 
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+  const supabaseUrl = "https://eqqohpkcshygvakvnvre.supabase.co";
+  const supabaseKey = "sb_publishable_7qiliYzeUqJE5IMiMO2luQ_4utxTjxL";
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-const app = document.getElementById("app");
+  const app = document.getElementById("app");
 
-if (!id) {
-  app.innerHTML = `
-    <div class="card">
-      <h3>Buat Link Surprise</h3>
-      <input id="nama" placeholder="Nama yang ulang tahun">
-      <input id="password" placeholder="Password">
-      <button onclick="buatLink()">Buat Link</button>
-      <p id="hasil"></p>
-    </div>
-  `;
-}
+  if (!id) {
 
-async function buatLink() {
-  const nama = document.getElementById("nama").value;
-  const password = document.getElementById("password").value;
-
-  const { data, error } = await supabase
-    .from("webHBD")
-    .insert([{ nama: nama, password: password }])
-    .select();
-
-  if (error) {
-    alert("Error: " + error.message);
-    return;
-  }
-
-  const newId = data[0].id;
-  const link = window.location.origin + "?id=" + newId;
-
-  document.getElementById("hasil").innerHTML =
-    "Link: <br><a href='" + link + "'>" + link + "</a>";
-}
-
-if (id) {
-  loadData();
-}
-
-async function loadData() {
-  const { data, error } = await supabase
-    .from("webHBD")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (!data) {
-    app.innerHTML = "<div class='card'>Link tidak ditemukan</div>";
-    return;
-  }
-
-  app.innerHTML = `
-    <div class="card">
-      <h3>Masukkan Password</h3>
-      <input id="pw">
-      <button onclick="cek('${data.password}','${data.nama}')">Masuk</button>
-    </div>
-  `;
-}
-
-function cek(password, nama) {
-  const pw = document.getElementById("pw").value;
-  if (pw === password) {
     app.innerHTML = `
-      <div class="card">
-        <h2>Selamat Ulang Tahun, ${nama}</h2>
-        <p>Semoga panjang umur, sehat selalu, dan semua impianmu tercapai.</p>
+      <div class="container">
+        <h2>Buat Link Surprise</h2>
+        <p>Masukkan nama dan password untuk membuat halaman ulang tahun pribadi.</p>
+        <input id="nama" placeholder="Nama yang berulang tahun">
+        <input id="password" placeholder="Password">
+        <button id="btn">Buat Link</button>
+        <div id="hasil" class="link-box"></div>
       </div>
     `;
+
+    document.getElementById("btn").onclick = async function () {
+      const nama = document.getElementById("nama").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!nama || !password) {
+        alert("Semua field harus diisi.");
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("webHBD")
+        .insert([{ nama: nama, password: password }])
+        .select();
+
+      if (error) {
+        alert("Terjadi kesalahan.");
+        return;
+      }
+
+      const newId = data[0].id;
+      const link = window.location.origin + "?id=" + newId;
+
+      document.getElementById("hasil").innerHTML =
+        "Link berhasil dibuat:<br><a href='" + link + "'>" + link + "</a>";
+    };
+
   } else {
-    alert("Password salah");
+
+    const { data } = await supabase
+      .from("webHBD")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (!data) {
+      app.innerHTML = "<div class='container'>Link tidak ditemukan.</div>";
+      return;
+    }
+
+    app.innerHTML = `
+      <div class="container">
+        <h2>Masukkan Password</h2>
+        <input id="pw" placeholder="Password">
+        <button id="cekbtn">Masuk</button>
+      </div>
+    `;
+
+    document.getElementById("cekbtn").onclick = function () {
+      const pw = document.getElementById("pw").value.trim();
+
+      if (pw === data.password) {
+        app.innerHTML = `
+          <div class="container">
+            <div class="success-title">Selamat Ulang Tahun, ${data.nama}</div>
+            <div class="success-message">
+              Semoga panjang umur, sehat selalu, dan setiap langkah ke depan membawa kebahagiaan baru dalam hidupmu.
+            </div>
+          </div>
+        `;
+      } else {
+        alert("Password salah.");
+      }
+    };
   }
-}
+
+});
 </script>
 
 </body>
