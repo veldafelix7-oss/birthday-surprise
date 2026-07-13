@@ -5,131 +5,105 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Surprise</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Great+Vibes&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <style>
 
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(180deg, #f7c6da, #fce9f3);
-  overflow-x: hidden;
-  width: 100%;
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+background:linear-gradient(180deg,#f8c9dd,#fdeaf3);
+overflow-x:hidden;
 }
 
-.section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 40px 20px;
-  max-width: 500px;
-  margin: auto;
+/* WRAPPER */
+.wrapper{
+max-width:480px;
+margin:auto;
+padding:50px 25px;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+position:relative;
 }
 
-.ribbon.left { top: 20px; left: 10px; }
-.ribbon.right { bottom: 40px; right: 20px; }
-
-.flower {
-  position: absolute;
-  width: 260px;
-  right: -40px;
-  top: 40%;
-  transform: translateY(-50%);
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
-  animation: floatSlow 8s ease-in-out infinite;
+/* DECOR */
+.ribbon{
+position:absolute;
+top:0;
+right:0;
+width:120px;
+opacity:0.6;
 }
 
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+.flower{
+position:absolute;
+bottom:0;
+left:-30px;
+width:180px;
+opacity:0.5;
 }
 
-@keyframes floatSlow {
-  0%,100% { transform: translateY(-50%); }
-  50% { transform: translateY(-60%); }
+/* TEXT */
+.title{
+font-family:'Playfair Display',serif;
+font-size:28px;
+font-weight:600;
+color:#8a3c5d;
+margin-bottom:15px;
+line-height:1.3;
 }
 
-/* SECTIONS */
-.section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 60px 30px;
-  position: relative;
-  z-index: 2;
+.subtitle{
+font-size:14px;
+line-height:1.6;
+color:#5c3a4a;
+margin-bottom:35px;
 }
 
-/* TEXT STYLE */
-.hero-title {
-  font-family: 'Great Vibes', cursive;
-  font-size: 42px;
-  color: #8c3a5c;
-  line-height: 1.2;
+/* FORM */
+input{
+width:100%;
+padding:13px;
+border-radius:30px;
+border:1px solid #e6b3c7;
+background:rgba(255,255,255,0.6);
+font-size:14px;
+margin-bottom:15px;
 }
 
-.subtitle {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px;
-  margin-top: 15px;
-  color: #6a3d50;
-  max-width: 420px;
+button{
+width:100%;
+padding:13px;
+border-radius:30px;
+border:none;
+background:linear-gradient(90deg,#e48ab2,#cf5c8e);
+color:white;
+font-size:14px;
+cursor:pointer;
+transition:0.3s;
 }
 
-.form-area {
-  margin-top: 40px;
-  max-width: 320px;
+button:hover{
+transform:scale(1.03);
 }
 
-input {
-  width: 100%;
-  padding: 12px;
-  margin-top: 14px;
-  border-radius: 30px;
-  border: 1px solid #e6a7c0;
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(6px);
-  font-size: 14px;
+.link-box{
+margin-top:15px;
+font-size:12px;
+word-break:break-all;
+color:#6a3d50;
 }
 
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 18px;
-  border-radius: 30px;
-  border: none;
-  background: linear-gradient(90deg, #e48ab2, #d06793);
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.3s;
+.fade-in{
+animation:fade 0.6s ease;
 }
 
-button:hover {
-  transform: scale(1.03);
-}
-
-.link-box {
-  margin-top: 15px;
-  font-size: 12px;
-  word-break: break-all;
-  color: #5c3345;
-}
-
-.sparkle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: white;
-  border-radius: 50%;
-  animation: sparkle 3s infinite ease-in-out;
-}
-
-@keyframes sparkle {
-  0%,100% { opacity: 0; transform: scale(0.5); }
-  50% { opacity: 1; transform: scale(1.2); }
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
 }
 
 </style>
@@ -137,80 +111,93 @@ button:hover {
 
 <body>
 
-<img src="https://i.imgur.com/0XKzn2L.png" class="ribbon left">
-<img src="https://i.imgur.com/0XKzn2L.png" class="ribbon right">
-<img src="https://i.imgur.com/1F6XG5L.png" class="flower">
-
-<div class="sparkle" style="top:20%; left:30%;"></div>
-<div class="sparkle" style="top:60%; left:70%;"></div>
-
 <div id="app"></div>
 
 <script>
-window.addEventListener("load", async function () {
+window.addEventListener("load", async function(){
 
-  const supabaseUrl = "https://eqqohpkcshygvakvnvre.supabase.co";
-  const supabaseKey = "sb_publishable_7qiliYzeUqJE5IMiMO2luQ_4utxTjxL";
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseUrl="https://eqqohpkcshygvakvnvre.supabase.co";
+const supabaseKey="sb_publishable_7qiliYzeUqJE5IMiMO2luQ_4utxTjxL";
+const supabase=window.supabase.createClient(supabaseUrl,supabaseKey);
 
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-  const app = document.getElementById("app");
+const params=new URLSearchParams(window.location.search);
+const id=params.get("id");
 
-  if (!id) {
+const app=document.getElementById("app");
 
-    app.innerHTML = `
-      <div class="section">
-        <div class="hero-title">A Special Birthday Page</div>
-        <div class="subtitle">
-          Buat halaman ulang tahun pribadi yang hanya bisa diakses dengan password.
-          Sebuah kejutan kecil yang penuh makna.
-        </div>
+if(!id){
 
-        <div class="form-area">
-          <input id="nama" placeholder="Nama yang berulang tahun">
-          <input id="password" placeholder="Password">
-          <button id="btn">Buat Link Surprise</button>
-          <div id="hasil" class="link-box"></div>
-        </div>
-      </div>
-    `;
+app.innerHTML=`
+<div class="wrapper fade-in">
+<img src="https://i.imgur.com/0XKzn2L.png" class="ribbon">
+<img src="https://i.imgur.com/1F6XG5L.png" class="flower">
 
-    document.getElementById("btn").onclick = async function () {
-      const nama = document.getElementById("nama").value.trim();
-      const password = document.getElementById("password").value.trim();
+<div class="title">Create a Personal Birthday Page</div>
+<div class="subtitle">
+Buat halaman ulang tahun pribadi yang hanya bisa diakses dengan password.
+Sebuah kejutan sederhana dengan sentuhan romantis.
+</div>
 
-      const { data } = await supabase
-        .from("webHBD")
-        .insert([{ nama: nama, password: password }])
-        .select();
+<input id="nama" placeholder="Nama yang berulang tahun">
+<input id="password" placeholder="Password untuk membuka halaman">
+<button id="btn">Buat Link Surprise</button>
 
-      const newId = data[0].id;
-      const link = window.location.origin + "?id=" + newId;
+<div id="hasil" class="link-box"></div>
+</div>
+`;
 
-      document.getElementById("hasil").innerHTML =
-        "Link:<br><a href='" + link + "'>" + link + "</a>";
-    };
+document.getElementById("btn").onclick=async function(){
 
-  } else {
+const nama=document.getElementById("nama").value.trim();
+const password=document.getElementById("password").value.trim();
 
-    const { data } = await supabase
-      .from("webHBD")
-      .select("*")
-      .eq("id", id)
-      .single();
+if(!nama||!password){
+alert("Semua field harus diisi.");
+return;
+}
 
-    app.innerHTML = `
-      <div class="section">
-        <div class="hero-title">Selamat Ulang Tahun, ${data.nama}</div>
-        <div class="subtitle">
-          Hari ini adalah bab baru dalam perjalanan hidupmu.
-          Semoga segala harapan dan rencana yang kamu simpan
-          perlahan menjadi nyata dan membawa kebahagiaan.
-        </div>
-      </div>
-    `;
-  }
+const {data,error}=await supabase
+.from("webHBD")
+.insert([{nama:nama,password:password}])
+.select();
+
+if(error){
+alert("Terjadi kesalahan.");
+return;
+}
+
+const newId=data[0].id;
+const link=window.location.origin+"?id="+newId;
+
+document.getElementById("hasil").innerHTML=
+"Link berhasil dibuat:<br><a href='"+link+"'>"+link+"</a>";
+
+};
+
+}else{
+
+const {data}=await supabase
+.from("webHBD")
+.select("*")
+.eq("id",id)
+.single();
+
+app.innerHTML=`
+<div class="wrapper fade-in">
+<img src="https://i.imgur.com/0XKzn2L.png" class="ribbon">
+<img src="https://i.imgur.com/1F6XG5L.png" class="flower">
+
+<div class="title">Selamat Ulang Tahun, ${data.nama}</div>
+
+<div class="subtitle">
+Hari ini adalah awal dari satu bab baru dalam hidupmu.
+Semoga setiap langkah yang kamu ambil membawa kedamaian,
+kebahagiaan, dan pencapaian yang terus bertumbuh.
+</div>
+</div>
+`;
+
+}
 
 });
 </script>
