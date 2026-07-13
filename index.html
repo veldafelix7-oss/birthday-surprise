@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Surprise</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Great+Vibes&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
@@ -14,14 +15,17 @@ body {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(180deg, #f7c6da, #fce9f3);
   overflow-x: hidden;
+  width: 100%;
 }
 
-/* FLOATING ELEMENTS */
-.ribbon {
-  position: absolute;
-  width: 200px;
-  animation: float 6s ease-in-out infinite;
-  opacity: 0.8;
+.section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 20px;
+  max-width: 500px;
+  margin: auto;
 }
 
 .ribbon.left { top: 20px; left: 10px; }
