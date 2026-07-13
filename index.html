@@ -29,21 +29,38 @@ justify-content:center;
 position:relative;
 }
 
-/* DECOR */
-.ribbon{
+.decor{
 position:absolute;
-top:0;
-right:0;
-width:120px;
-opacity:0.6;
+width:220px;
+height:220px;
+border-radius:50%;
+filter:blur(60px);
+opacity:0.35;
+z-index:0;
 }
 
-.flower{
-position:absolute;
-bottom:0;
-left:-30px;
-width:180px;
-opacity:0.5;
+.decor-top{
+top:-80px;
+right:-80px;
+background:#f5a9c6;
+}
+
+.decor-bottom{
+bottom:-80px;
+left:-80px;
+background:#e48ab2;
+}
+
+.decor-top{
+top:-80px;
+right:-80px;
+background:#f5a9c6;
+}
+
+.decor-bottom{
+bottom:-80px;
+left:-80px;
+background:#e48ab2;
 }
 
 /* TEXT */
@@ -129,8 +146,8 @@ if(!id){
 
 app.innerHTML=`
 <div class="wrapper fade-in">
-<img src="https://i.imgur.com/0XKzn2L.png" class="ribbon">
-<img src="https://i.imgur.com/1F6XG5L.png" class="flower">
+<div class="decor decor-top"></div>
+<div class="decor decor-bottom"></div>
 
 <div class="title">Create a Personal Birthday Page</div>
 <div class="subtitle">
@@ -184,8 +201,7 @@ const {data}=await supabase
 
 app.innerHTML=`
 <div class="wrapper fade-in">
-<img src="https://i.imgur.com/0XKzn2L.png" class="ribbon">
-<img src="https://i.imgur.com/1F6XG5L.png" class="flower">
+
 
 <div class="title">Selamat Ulang Tahun, ${data.nama}</div>
 
